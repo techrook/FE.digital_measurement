@@ -9,27 +9,27 @@
 <body>
     <div class="container">
         <h1>Add Measurement</h1>
-        <form id="addMeasurementForm" method="post"  enctype="multipart/form-data" onsubmit="addMeasurement(event)">
+        <form id="addMeasurementForm"  onsubmit="addMeasurement(event)">
             <label for="gender">Gender:</label>
             <input type="text" id="gender" name="gender" required><br><br>
 
             <label for="clothOwnerName">Cloth Owner Name:</label>
-            <input type="text" id="clothOwnerName" name="clothOwnerName" required><br><br>
+            <input type="text" id="clothOwnerName" name="cloth_Owner_name" required><br><br>
 
             <label for="chest">Chest:</label>
             <input type="number" id="chest" name="chest" required><br><br>
 
             <label for="waist">Waist:</label>
-            <input type="number" id="waist" name="waist" required><br><br>
+            <input type="number" id="waist" name="Waist" required><br><br>
 
             <label for="hips">Hips:</label>
-            <input type="number" id="hips" name="hips" required><br><br>
+            <input type="number" id="hips" name="Hips" required><br><br>
 
             <label for="neckToWaist">Neck to Waist:</label>
-            <input type="number" id="neckToWaist" name="neckToWaist" required><br><br>
+            <input type="number" id="neckToWaist" name="neck_to_waist" required><br><br>
 
             <label for="waistDownToDesiredLength">Waist Down to Desired Length:</label>
-            <input type="number" id="waistDownToDesiredLength" name="waistDownToDesiredLength" required><br><br>
+            <input type="number" id="waistDownToDesiredLength" name="waist_down_to_desired_lenght" required><br><br>
 
             <label for="laps">Laps:</label>
             <input type="number" id="laps" name="laps" required><br><br>
@@ -51,6 +51,7 @@
 
             <input type="submit" value="Add">
         </form>
+        
     </div>
     <script>
 const token = localStorage.getItem('token');
@@ -77,9 +78,9 @@ const token = localStorage.getItem('token');
                 const data = await response.json();
                 console.log('Measurement added successfully:', response);
                 // Reset the form after successful submission
-                // form.reset();
+                form.reset();
                 // Redirect to the homepage
-                // window.location.href = 'home.html';
+                window.location.href = 'home.html';
             } catch (error) {
                 console.error('Error adding measurement:', error);
             }
