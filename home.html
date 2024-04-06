@@ -7,57 +7,66 @@
     <link rel="stylesheet" href="home.css">
 </head>
 <body>
-    <h1>My Designs</h1>
-    <div id="designsContainer"></div>
+    <div class="container">
+        <h1>My Designs</h1>
+        <div id="designsContainer"></div>
+         <button id="add_measurement_button">Add Measurement</button>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-    fetchDesigns();
-});
+            const token = localStorage.getItem('token');
+            fetchDesigns(token);
 
-function fetchDesigns() {
-    const token = localStorage.getItem('token'); // Retrieve the token
-
-    fetch('http://localhost:3333/measurement/', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        const container = document.getElementById('designsContainer');
-        data.forEach(design => {
-            container.appendChild(createDesignCard(design));
         });
-    })
-    .catch(error => console.error('Error fetching designs:', error));
-}
+        const add_measurement_button = document.getElementById('add_measurement_button');
+        add_measurement_button.addEventListener("click", function(){
+                window.location.href = 'addmeasurement.html'; 
+            });
 
+        function fetchDesigns(token) {
+            fetch('http://localhost:3333/measurement/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('designsContainer');
+                data.forEach(design => {
+                    container.appendChild(createDesignCard(design));
+                    console.log(design);
+                });
+            })
+            .catch(error => console.error('Error fetching designs:', error));
+        }
 
-function createDesignCard(design) {
-    const card = document.createElement('div');
-    card.className = 'design-card';
+        function createDesignCard(design) {
+            const card = document.createElement('div');
+            card.className = 'design-card';
 
-    const image = document.createElement('img');
-    image.src = design.dress_design;
-    image.alt = `Design for ${design.cloth_Owner_name}`;
+            const image = document.createElement('img');
+            image.src = design.dress_design;
+            image.alt = `Design for ${design.cloth_Owner_name}`;
 
-    const info = document.createElement('div');
-    info.className = 'design-info';
-    info.innerHTML = `
-        <h3>${design.cloth_Owner_name}'s Design</h3>
-        <p>Gender: ${design.gender}</p>
-        <p>Chest: ${design.chest} | Waist: ${design.Waist} | Hips: ${design.Hips}</p>
-    `;
+            const info = document.createElement('div');
+            info.className = 'design-info';
+            info.innerHTML = `
+                <h3>${design.cloth_Owner_name}'s Design</h3>
+                <p>Gender: ${design.gender}</p>
+                <p>Chest: ${design.chest} | Waist: ${design.Waist} | Hip: ${design.Hips}</p>
+                <p>Ankle: ${design.ankle} | Lap: ${design.laps} | Neck: ${design.neck}</p>
+                <p>Neck to waist: ${design.neck_to_waist} | shoulder: ${design.shoulders} | wrist: ${design.wrist} </p>
+                <p>Waist down to desired length: ${design.waist_down_to_desired_lenght} </p>
+            `;
 
-    card.appendChild(image);
-    card.appendChild(info);
+            card.appendChild(image);
+            card.appendChild(info);
 
-    return card;
-}
-
+            return card;
+        }
     </script>
 </body>
 </html>
