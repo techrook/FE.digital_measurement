@@ -1,63 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <<link rel="stylesheet" href="signin.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="signin.css" />
     <title>Register</title>
-</head>
-<body>
-    <form id="signupForm" action="" style="border:1px solid #ccc">
-        <div class="container">
-          <h1>Sign Up</h1>
-          <p>Please fill in this form to create an account.</p>
-          <hr>
-      
-          <label for="email"><b>Email</b></label>
-          <input type="text" placeholder="Enter Email" name="email" required>
-      
-          <label for="psw"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" name="psw" required>
-      
-          <div class="clearfix">
-            <button type="submit" class="signupbtn">Sign Up</button>
-          </div>
-          <p id="message" style="color: red;"></p>
-        </div>
-      </form>
-      <script>
-        document.getElementById("signupForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Prevent the form from submitting normally
+  </head>
+  <body>
+    <form id="signupForm" action="">
+      <h1 class="form-title">Sign Up</h1>
+      <p>Please fill in this form to create an account.</p>
 
-            // Get the form data
-            const formData = new FormData(this);
-            const email = formData.get("email");
-            const password = formData.get("psw");
+      <label for="email"><b>Email</b></label>
+      <input type="email" placeholder="Enter Email" name="email" required />
 
-            // Send a POST request to your API endpoint
-            fetch("http://localhost:3333/auth/signup", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ email, password })
-            })
-            .then(response => {
-                if (response.status != 201) {
-                    document.getElementById("message").textContent = "Sign up failed. Please try again.";
-                    console.error("There was a problem with your fetch operation:", error);
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Handle the API response
-                window.location.href = "success-signup.html";
-            })
-            .catch(error => {
-                document.getElementById("message").textContent = "Sign up failed. Please try again.";
-                console.error("There was a problem with your fetch operation:", error);
+      <label for="psw"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="psw" required />
+
+      <button type="submit" class="signupbtn">Sign Up</button>
+      <p id="message" class="form-message"></p>
+    </form>
+    <script>
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault(); // Prevent the form from submitting normally
+
+          // Get the form data
+          const formData = new FormData(this);
+          const email = formData.get("email");
+          const password = formData.get("psw");
+
+          try {
+            const response = await fetch("http://localhost:3333/auth/signup", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email, password }),
             });
+            const data = await response.json();
+            if (response.status !== 201) {
+              document.getElementById(
+                "message"
+              ).textContent = `Sign up failed,${data.message}.`;
+              return;
+            }
+
+            // Handle the API response
+            window.location.href = "success-signup.html";
+          } catch (error) {
+            document.getElementById("message").textContent =
+              "Sign up failed. Please try again.";
+          }
         });
     </script>
-</body>
+  </body>
 </html>
