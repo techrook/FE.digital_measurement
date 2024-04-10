@@ -49,7 +49,7 @@ loginForm.addEventListener('submit', async (e) => {
             window.location.href = 'home.html'; // Adjust the URL as needed
         } else {
             // Handle login failure
-            document.getElementById("message").textContent = "login failed. Please try again.";
+            document.getElementById("message").textContent = `login failed,${data.message}.  Please try again.`;
                     
         }
     } catch (error) {
