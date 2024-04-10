@@ -1,62 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="login.css"> 
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="login.css" />
     <title>Login</title>
-</head>
-<body>
-      
+  </head>
+  <body>
     <form id="loginForm" action="" method="post">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <button type="submit">Login</button>
-        <p id="message" style="color: red;"></p>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required />
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required />
+      <button type="submit">Login</button>
+      <p id="message" style="color: red"></p>
     </form>
     <script>
-        const loginForm = document.getElementById('loginForm');
+      const loginForm = document.getElementById("loginForm");
 
-loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault(); // Prevent the default form submission
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault(); // Prevent the default form submission
 
-    // Get user input
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+        // Get user input
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
 
-    // API request options
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-    };
+        // API request options
+        const options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        };
 
-    // Send request to your API
-    try {
-        const response = await fetch('http://localhost:3333/auth/signin', options);
-        const data = await response.json();
+        // Send request to your API
+        try {
+          const response = await fetch(
+            "http://localhost:3333/auth/signin",
+            options
+          );
+          const data = await response.json();
 
-        if (response.ok) {
+          if (response.ok) {
             // Store the token in localStorage
 
-            localStorage.setItem('token', data.access_token);
+            localStorage.setItem("token", data.access_token);
 
             // Redirect to the homepage
-            window.location.href = 'home.html'; // Adjust the URL as needed
-        } else {
+            window.location.href = "home.html"; // Adjust the URL as needed
+          } else {
             // Handle login failure
-            document.getElementById("message").textContent = `login failed,${data.message}.  Please try again.`;
-                    
+            document.getElementById(
+              "message"
+            ).textContent = `login failed,${data.message}.  Please try again.`;
+          }
+        } catch (error) {
+          document.getElementById(
+            "message"
+          ).textContent = `login failed,${data.message}.  Please try again.`;
         }
-    } catch (error) {
-        console.error('Login error:', error);
-        document.getElementById("message").textContent = "login failed. Please try again.";
-    }
-});
+      });
     </script>
-</body>
+  </body>
 </html>
