@@ -1,102 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add Measurement</title>
-    <link rel="stylesheet" href="add_measurement.css">
-</head>
-<body>
+    <link rel="stylesheet" href="add_measurement.css" />
+  </head>
+  <body>
     <div class="container">
-        <h1>Add Measurement</h1>
-        <form id="addMeasurementForm"  onsubmit="addMeasurement(event)">
-            <label for="gender">Gender:</label>
-            <input type="text" id="gender" name="gender" required><br><br>
+      <h1>Add Measurement</h1>
+      <form id="addMeasurementForm" onsubmit="addMeasurement(event)">
+        <label for="gender">Gender:</label>
+        <input type="text" id="gender" name="gender" required /><br /><br />
 
-            <label for="clothOwnerName">Cloth Owner Name:</label>
-            <input type="text" id="clothOwnerName" name="cloth_Owner_name" required><br><br>
+        <label for="clothOwnerName">Cloth Owner Name:</label>
+        <input
+          type="text"
+          id="clothOwnerName"
+          name="cloth_Owner_name"
+          required
+        /><br /><br />
 
-            <label for="chest">Chest:</label>
-            <input type="number" id="chest" name="chest" required><br><br>
+        <label for="chest">Chest:</label>
+        <input type="number" id="chest" name="chest" /><br /><br />
 
-            <label for="waist">Waist:</label>
-            <input type="number" id="waist" name="Waist" required><br><br>
+        <label for="waist">Waist:</label>
+        <input type="number" id="waist" name="Waist" /><br /><br />
 
-            <label for="hips">Hips:</label>
-            <input type="number" id="hips" name="Hips" required><br><br>
+        <label for="hips">Hips:</label>
+        <input type="number" id="hips" name="Hips" /><br /><br />
 
-            <label for="neckToWaist">Neck to Waist:</label>
-            <input type="number" id="neckToWaist" name="neck_to_waist" required><br><br>
+        <label for="neckToWaist">Neck to Waist:</label>
+        <input
+          type="number"
+          id="neckToWaist"
+          name="neck_to_waist"
+        /><br /><br />
 
-            <label for="waistDownToDesiredLength">Waist Down to Desired Length:</label>
-            <input type="number" id="waistDownToDesiredLength" name="waist_down_to_desired_lenght" required><br><br>
+        <label for="waistDownToDesiredLength"
+          >Waist Down to Desired Length:</label
+        >
+        <input
+          type="number"
+          id="waistDownToDesiredLength"
+          name="waist_down_to_desired_lenght"
+        /><br /><br />
 
-            <label for="laps">Laps:</label>
-            <input type="number" id="laps" name="laps" required><br><br>
+        <label for="laps">Laps:</label>
+        <input type="number" id="laps" name="laps" /><br /><br />
 
-            <label for="wrist">Wrist:</label>
-            <input type="text" id="wrist" name="wrist" required><br><br>
+        <label for="wrist">Wrist:</label>
+        <input type="text" id="wrist" name="wrist" /><br /><br />
 
-            <label for="ankle">Ankle:</label>
-            <input type="number" id="ankle" name="ankle" required><br><br>
+        <label for="ankle">Ankle:</label>
+        <input type="number" id="ankle" name="ankle" /><br /><br />
 
-            <label for="shoulders">Shoulders:</label>
-            <input type="number" id="shoulders" name="shoulders" required><br><br>
+        <label for="shoulders">Shoulders:</label>
+        <input type="number" id="shoulders" name="shoulders" /><br /><br />
 
-            <label for="neck">Neck:</label>
-            <input type="number" id="neck" name="neck" required><br><br>
+        <label for="neck">Neck:</label>
+        <input type="number" id="neck" name="neck" /><br /><br />
 
-            <label for="file">Image:</label>
-            <input type="file" id="file" name="file" required accept="image/webp, image/jpeg, image/png" ><br><br>
+        <label for="file">Image:</label>
+        <input
+          type="file"
+          id="file"
+          name="file"
+          accept="image/webp, image/jpeg, image/png"
+        /><br /><br />
 
-            <input type="submit" value="Add">
-            <p id="message" class="form-message"></p>
-        </form>
-        
+        <input type="submit" value="Add" />
+        <p id="message" class="form-message"></p>
+      </form>
     </div>
     <script>
-const token = localStorage.getItem('token');
-        const form = document.querySelector('form');
+      const token = localStorage.getItem("token");
+      const form = document.querySelector("form");
 
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log(token);
-        });
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log(token);
+      });
 
-        async function addMeasurement(event) {
-            event.preventDefault(); // Prevent the form from submitting normally
+      async function addMeasurement(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
 
-            // Get form input values
-            const formData = new FormData(form);
+        // Get form input values
+        const formData = new FormData(form);
 
-            try {
-                const response = await fetch('http://localhost:3333/measurement/addmeasurement', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                const data = await response.json();
-                if (response.status !== 201) {
-              document.getElementById(
-                "message"
-              ).textContent = `error while trying to add design,${data.message}. try again`;
-              return;
+        try {
+          const response = await fetch(
+            "http://localhost:3333/measurement/addmeasurement",
+            {
+              method: "POST",
+              body: formData,
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             }
-                
-                console.log('Measurement added successfully:', response);
-                // Reset the form after successful submission
-                form.reset();
-                // Redirect to the homepage
-                window.location.href = 'home.html';
-            } catch (error) {
-                document.getElementById(
-                "message"
-              ).textContent = `error while trying to add design,${data.message}. try again`;
-                console.error('Error adding measurement:', error);
-            }
+          );
+          const data = await response.json();
+          if (response.status !== 201) {
+            document.getElementById(
+              "message"
+            ).textContent = `error while trying to add design,${data.message}. try again`;
+            return;
+          }
+
+          console.log("Measurement added successfully:", response);
+          // Reset the form after successful submission
+          form.reset();
+          // Redirect to the homepage
+          window.location.href = "home.html";
+        } catch (error) {
+          document.getElementById(
+            "message"
+          ).textContent = `error while trying to add design,${data.message}. try again`;
+          console.error("Error adding measurement:", error);
         }
-
+      }
     </script>
-</body>
+  </body>
 </html>
