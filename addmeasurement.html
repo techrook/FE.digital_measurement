@@ -50,6 +50,7 @@
             <input type="file" id="file" name="file" required accept="image/webp, image/jpeg, image/png" ><br><br>
 
             <input type="submit" value="Add">
+            <p id="message" class="form-message"></p>
         </form>
         
     </div>
@@ -76,12 +77,22 @@ const token = localStorage.getItem('token');
                     }
                 });
                 const data = await response.json();
+                if (response.status !== 201) {
+              document.getElementById(
+                "message"
+              ).textContent = `error while trying to add design,${data.message}. try again`;
+              return;
+            }
+                
                 console.log('Measurement added successfully:', response);
                 // Reset the form after successful submission
                 form.reset();
                 // Redirect to the homepage
                 window.location.href = 'home.html';
             } catch (error) {
+                document.getElementById(
+                "message"
+              ).textContent = `error while trying to add design,${data.message}. try again`;
                 console.error('Error adding measurement:', error);
             }
         }

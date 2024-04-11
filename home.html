@@ -14,7 +14,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() { 
             const token = localStorage.getItem('token');
             if (!token) {
             window.location.href = 'login.html'; // Redirect to login page
@@ -39,10 +39,19 @@
             .then(response => response.json())
             .then(data => {
                 const container = document.getElementById('designsContainer');
+        container.innerHTML = '';
+                if (data.length === 0) {
+            const message = document.createElement('p');
+            message.textContent = 'No designs available.';
+            container.appendChild(message);
+                }else {
                 data.forEach(design => {
                     container.appendChild(createDesignCard(design));
                     console.log(design);
-                });
+                  });  
+                }
+                
+                
             })
             .catch(error => console.error('Error fetching designs:', error));
         }
