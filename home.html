@@ -76,15 +76,19 @@
                 <p>Waist down to desired length: ${design.waist_down_to_desired_lenght} </p>
 
             `;
+            const buttonContainer = document.createElement('div');
+buttonContainer.className = 'button-container';
 
         const editButton = document.createElement("button");
         editButton.textContent = "Edit";
+        editButton.className = 'edit-button';
         editButton.addEventListener("click", function () {
           // Handle edit functionality here
         });
 
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "Delete";
+        deleteButton.className = 'delete-button';
         deleteButton.addEventListener("click", async function () {
           const token = localStorage.getItem("token");
           try {
@@ -112,6 +116,11 @@
             console.error(error);
           }
         });
+
+        buttonContainer.appendChild(editButton);
+buttonContainer.appendChild(deleteButton);
+card.appendChild(buttonContainer);
+
 
         card.appendChild(image);
         card.appendChild(info);
