@@ -10,10 +10,12 @@
     <div class="container">
         <h1>My Designs</h1>
         <div id="designsContainer"></div>
+        <p id="info"></p>
         <button id="add_measurement_button">Add Measurement</button>
     </div>
 
     <script>
+        const container_info = document.getElementById('info');
         document.addEventListener('DOMContentLoaded', function() { 
             const token = localStorage.getItem('token');
             if (!token) {
@@ -70,6 +72,7 @@
                 <p>Ankle: ${design.ankle} | Lap: ${design.laps} | Neck: ${design.neck}</p>
                 <p>Neck to waist: ${design.neck_to_waist} | shoulder: ${design.shoulders} | wrist: ${design.wrist} </p>
                 <p>Waist down to desired length: ${design.waist_down_to_desired_lenght} </p>
+
             `;
 
             const editButton = document.createElement('button');
@@ -80,8 +83,32 @@
 
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
-            deleteButton.addEventListener('click', function() {
-                // Handle delete functionality here
+            deleteButton.addEventListener('click', async function() {
+                const token = localStorage.getItem('token');
+                try {
+                    const response = await fetch(
+                        `http://localhost:3333/measurement/${design.id}`,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+                    )
+                    const data = await response.json();
+                    if (response.ok) {
+                // Remove the design card from the UI
+                await card.remove();
+                await window.location.reload();
+                return
+            } else {
+                // const container_info = document.getElementById('info');
+                container_info.innerHTML= `error, design not deleted${data.message} `
+            }
+                } catch (error) {
+                    console.error(error)
+                }
             });
 
             card.appendChild(image);
