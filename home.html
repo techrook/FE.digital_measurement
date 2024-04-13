@@ -16,6 +16,7 @@
 
     <script>
       const container_info = document.getElementById("info");
+      let isEditing = false;
       document.addEventListener("DOMContentLoaded", function () {
         const token = localStorage.getItem("token");
         if (!token) {
@@ -60,6 +61,7 @@
       function createDesignCard(design) {
         const card = document.createElement("div");
         card.className = "design-card";
+        card.id = `design-${design.id}`;
 
         const image = document.createElement("img");
         image.src = design.dress_design;
@@ -69,29 +71,34 @@
         info.className = "design-info";
         info.innerHTML = `
                 <h3>${design.cloth_Owner_name}'s Design</h3>
-                <p>Gender: ${design.gender}</p>
-                <p>Chest: ${design.chest} | Waist: ${design.Waist} | Hip: ${design.Hips}</p>
-                <p>Ankle: ${design.ankle} | Lap: ${design.laps} | Neck: ${design.neck}</p>
-                <p>Neck to waist: ${design.neck_to_waist} | shoulder: ${design.shoulders} | wrist: ${design.wrist} </p>
-                <p>Waist down to desired length: ${design.waist_down_to_desired_lenght} </p>
-
+                <p class="gender">Gender: ${design.gender}</p>
+                <p class="clothOwnerName">Cloth Owner Name: ${design.cloth_Owner_name}</p>
+                <p class="chest">Chest: ${design.chest} | Waist: ${design.Waist} | Hip: ${design.Hips}</p>
+                <p class="ankle">Ankle: ${design.ankle} | Lap: ${design.laps} | Neck: ${design.neck}</p>
+                <p class="neckToWaist">Neck to waist: ${design.neck_to_waist} | shoulder: ${design.shoulders} | wrist: ${design.wrist} </p>
+                <p class="waistDownToDesiredLength">Waist down to desired length: ${design.waist_down_to_desired_lenght} </p>
             `;
-            const buttonContainer = document.createElement('div');
-buttonContainer.className = 'button-container';
+
+        const buttonContainer = document.createElement("div");
+        buttonContainer.className = "button-container";
 
         const editButton = document.createElement("button");
         editButton.textContent = "Edit";
-        editButton.className = 'edit-button';
+        editButton.className = "edit-button";
+        editButton.disabled = isEditing;
         editButton.addEventListener("click", function () {
-          // Handle edit functionality here
+          isEditing = !isEditing;
+          const token = localStorage.getItem("token");
+          openEditForm(design, token);
+          editButton.disabled = isEditing;
         });
 
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "Delete";
-        deleteButton.className = 'delete-button';
+        deleteButton.className = "delete-button";
         deleteButton.addEventListener("click", async function () {
-          const token = localStorage.getItem("token");
           try {
+            const token = localStorage.getItem("token");
             const response = await fetch(
               `http://localhost:3333/measurement/${design.id}`,
               {
@@ -102,32 +109,115 @@ buttonContainer.className = 'button-container';
                 },
               }
             );
-            const data = await response.json();
             if (response.ok) {
               // Remove the design card from the UI
-              await card.remove();
-              await window.location.reload();
-              return;
+              card.remove();
+              // Reload the page to reflect the changes
+              window.location.reload();
             } else {
-              // const container_info = document.getElementById('info');
-              container_info.innerHTML = `error, design not deleted${data.message} `;
+              container_info.innerHTML = `Error: ${data.message}`;
             }
           } catch (error) {
-            console.error(error);
+            container_info.innerHTML = `Error: ${error.message}`;
           }
         });
 
         buttonContainer.appendChild(editButton);
-buttonContainer.appendChild(deleteButton);
-card.appendChild(buttonContainer);
-
+        buttonContainer.appendChild(deleteButton);
 
         card.appendChild(image);
         card.appendChild(info);
-        card.appendChild(editButton);
-        card.appendChild(deleteButton);
+        card.appendChild(buttonContainer);
 
         return card;
+      }
+
+      function openEditForm(design, token) {
+        const form = document.createElement("form");
+        form.innerHTML = `
+    <label for="gender">Gender:</label>
+    <input type="text" id="gender" name="gender" value="${design.gender}">
+    <br>
+    <label for="clothOwnerName">Cloth Owner Name:</label>
+    <input type="text" id="clothOwnerName" name="clothOwnerName" value="${design.cloth_Owner_name}">
+    <br>
+    <label for="chest">Chest:</label>
+    <input type="number" id="chest" name="chest" value="${design.chest}">
+    <br>
+    <label for="waist">Waist:</label>
+    <input type="number" id="waist" name="waist" value="${design.Waist}">
+    <br>
+    <label for="hips">Hip:</label>
+    <input type="number" id="hips" name="hips" value="${design.Hips}">
+    <br>
+    <label for="ankle">Ankle:</label>
+    <input type="number" id="ankle" name="ankle" value="${design.ankle}">
+    <br>
+    <label for="laps">Lap:</label>
+    <input type="number" id="laps" name="laps" value="${design.laps}">
+    <br>
+    <label for="neck">Neck:</label>
+    <input type="number" id="neck" name="neck" value="${design.neck}">
+    <br>
+    <label for="neckToWaist">Neck to Waist:</label>
+    <input type="number" id="neckToWaist" name="neckToWaist" value="${design.neck_to_waist}">
+    <br>
+    <label for="shoulders">Shoulder:</label>
+    <input type="number" id="shoulders" name="shoulders" value="${design.shoulders}">
+    <br>
+    <label for="wrist">Wrist:</label>
+    <input type="number" id="wrist" name="wrist" value="${design.wrist}">
+    <br>
+    <label for="waistDownToDesiredLength">Waist down to desired length:</label>
+    <input type="number" id="waistDownToDesiredLength" name="waistDownToDesiredLength" value="${design.waist_down_to_desired_lenght}">
+    <br>
+    <button type="submit">Save</button>
+`;
+
+        form.addEventListener("submit", async function (event) {
+          event.preventDefault();
+          const updatedDesign = {
+            gender: form.elements.gender.value,
+            cloth_Owner_name: form.elements.clothOwnerName.value,
+            chest: form.elements.chest.value,
+            Waist: parseInt(form.elements.waist.value),
+            Hips: parseInt(form.elements.hips.value),
+            ankle: parseInt(form.elements.ankle.value),
+            laps: parseInt(form.elements.laps.value),
+            neck: parseInt(form.elements.neck.value),
+            neck_to_waist: parseInt(form.elements.neckToWaist.value),
+            shoulders: parseInt(form.elements.shoulders.value),
+            wrist: parseInt(form.elements.wrist.value),
+            waist_down_to_desired_lenght: parseInt(
+              form.elements.waistDownToDesiredLength.value
+            ),
+          };
+
+          try {
+            const response = await fetch(
+              `http://localhost:3333/measurement/${design.id}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(updatedDesign),
+              }
+            );
+            const data = await response.json();
+            if (response.ok) {
+              await form.remove();
+              // Reload the page to reflect the changes
+              await window.location.reload();
+            } else {
+              container_info.innerHTML = `Error: Failed to update design`;
+            }
+          } catch (error) {
+            container_info.innerHTML = `Error: ${error.message}`;
+          }
+        });
+        document.body.appendChild(form);
       }
     </script>
   </body>
