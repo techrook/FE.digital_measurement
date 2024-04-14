@@ -25,6 +25,8 @@
         &copy; 2024 Your Company Name. All rights reserved.
     </footer>
     <script>
+
+      const brand_name = document.getElementById("brand_name");
       const container_info = document.getElementById("info");
       let isEditing = false;
       document.addEventListener("DOMContentLoaded", function () {
@@ -34,6 +36,7 @@
           return;
         }
         fetchDesigns(token);
+        brandName(token);
       });
 
       const add_measurement_button = document.getElementById(
@@ -228,6 +231,31 @@
           }
         });
         document.body.appendChild(form);
+      }
+      async function brandName(token){
+        try {
+          const response = await fetch(
+            `http://localhost:3333/users/me`,
+            {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                }
+              }
+          )
+          const data = await response.json()
+          if(response.ok){
+            if(data.brandName == null){
+              brand_name.innerHTML= `Your Brand Name`
+              return
+            }
+
+            brand_name.innerHTML=`${data.brandName}`
+          }
+        } catch (error) {
+          brand_name.innerHTML=`loading ....`
+        }
       }
     </script>
   </body>
