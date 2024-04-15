@@ -8,11 +8,17 @@
   </head>
   <body>
     <header>
-        <h1>tailor's companion</h1>
-        <div class="user-profile">
-            <p id="brand_name"></p>
-            <a href="editprofile.html">Edit Profile</a>
+      <h1>tailor's companion</h1>
+      <div class="user-profile">
+        <p id="brand_name"></p>
+        <div class="dropdown">
+          <button class="dropbtn">Edit Profile</button>
+          <div class="dropdown-content">
+            <a id="updateBrandNameLink" href="#">Update Brand Name</a>
+            <a id="" href="changepassword.html">Change Password</a>
+          </div>
         </div>
+      </div>
     </header>
 
     <div class="container">
@@ -21,13 +27,31 @@
       <p id="info"></p>
       <button id="add_measurement_button">Add Measurement</button>
     </div>
-    <footer>
-        &copy; 2024 Your Company Name. All rights reserved.
-    </footer>
+    <div id="updateBrandNameModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Update Brand Name</h2>
+        <form id="updateBrandNameForm">
+          <label for="brandName">Brand Name:</label>
+          <input type="text" id="brandName" name="brandName" required />
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+    <footer>&copy; 2024 Your Company Name. All rights reserved.</footer>
     <script>
-
       const brand_name = document.getElementById("brand_name");
       const container_info = document.getElementById("info");
+      // Get the modal
+      const modal = document.getElementById("updateBrandNameModal");
+
+      // Get the link that opens the modal
+      const updateBrandNameLink = document.getElementById(
+        "updateBrandNameLink"
+      );
+
+      // Get the <span> element that closes the modal
+      const closeBtn = document.getElementsByClassName("close")[0];
       let isEditing = false;
       document.addEventListener("DOMContentLoaded", function () {
         const token = localStorage.getItem("token");
@@ -45,6 +69,50 @@
       add_measurement_button.addEventListener("click", function () {
         window.location.href = "addmeasurement.html";
       });
+      updateBrandNameLink.addEventListener("click", function () {
+        modal.style.display = "block";
+      });
+
+      // When the user clicks on <span> (x), close the modal
+      closeBtn.addEventListener("click", function () {
+        modal.style.display = "none";
+      });
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.addEventListener("click", function (event) {
+        if (event.target === modal) {
+          modal.style.display = "none";
+        }
+      });
+
+      // Form submission
+      const updateBrandNameForm = document.getElementById(
+        "updateBrandNameForm"
+      );
+
+      updateBrandNameForm.addEventListener("submit", async function (event) {
+  event.preventDefault();
+  const brandName = document.getElementById("brandName").value;
+  // Handle form submission here (e.g., send data to server)
+  const token = localStorage.getItem("token");
+  try {
+    const response = await fetch("http://localhost:3333/users/brandname", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+      },
+      body: JSON.stringify({ brandName: brandName }), // Send as an object
+    });
+    if (response.ok) {
+      window.location.reload();
+      return
+    }
+    
+  } catch (error) {
+    brand_name.innerHTML = `loading ....`;
+  }
+});
 
       function fetchDesigns(token) {
         fetch("http://localhost:3333/measurement/", {
@@ -232,29 +300,26 @@
         });
         document.body.appendChild(form);
       }
-      async function brandName(token){
+      async function brandName(token) {
         try {
-          const response = await fetch(
-            `http://localhost:3333/users/me`,
-            {
-                method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-                }
-              }
-          )
-          const data = await response.json()
-          if(response.ok){
-            if(data.brandName == null){
-              brand_name.innerHTML= `Your Brand Name`
-              return
+          const response = await fetch(`http://localhost:3333/users/me`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const data = await response.json();
+          if (response.ok) {
+            if (data.brandName == null) {
+              brand_name.innerHTML = `Your Brand Name`;
+              return;
             }
 
-            brand_name.innerHTML=`${data.brandName}`
+            brand_name.innerHTML = `${data.brandName} Brand`;
           }
         } catch (error) {
-          brand_name.innerHTML=`loading ....`
+          brand_name.innerHTML = `loading ....`;
         }
       }
     </script>
