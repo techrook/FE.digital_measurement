@@ -15,7 +15,7 @@
           <button class="dropbtn">Edit Profile</button>
           <div class="dropdown-content">
             <a id="updateBrandNameLink" href="#">Update Brand Name</a>
-            <a id="" href="changepassword.html">Change Password</a>
+            <a id="changepasswordLink" href="#">Change Password</a>
           </div>
         </div>
       </div>
@@ -38,18 +38,29 @@
         </form>
       </div>
     </div>
+    <div id="changePasswordModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>change Password</h2>
+        <form id="changePasswordForm">
+          <label for="oldPassword">Old Password:</label>
+          <input type="text" id="oldPassword" name="oldPassword" required />
+          <label for="newPassword">New Password:</label>
+          <input type="text" id="newPassword" name="newPassword" required />
+          <button type="submit">Submit</button>
+        </form>
+        <p id="changepasswordMessage"></p>
+      </div>
+    </div>
     <footer>&copy; 2024 Your Company Name. All rights reserved.</footer>
     <script>
       const brand_name = document.getElementById("brand_name");
       const container_info = document.getElementById("info");
       // Get the modal
       const modal = document.getElementById("updateBrandNameModal");
-
-      // Get the link that opens the modal
-      const updateBrandNameLink = document.getElementById(
-        "updateBrandNameLink"
-      );
-
+      const changePasswordModal = document.getElementById("changePasswordModal");
+      // const updateBrandNameLink = document.getElementById("updateBrandNameLink");
+      const changepasswordLink = document.getElementById("changepasswordLink");
       // Get the <span> element that closes the modal
       const closeBtn = document.getElementsByClassName("close")[0];
       let isEditing = false;
@@ -71,6 +82,9 @@
       });
       updateBrandNameLink.addEventListener("click", function () {
         modal.style.display = "block";
+      });
+      changepasswordLink.addEventListener("click", function () {
+        changePasswordModal.style.display = "block";
       });
 
       // When the user clicks on <span> (x), close the modal
@@ -113,7 +127,37 @@
     brand_name.innerHTML = `loading ....`;
   }
 });
-
+const changePasswordForm = document.getElementById(
+        "changePasswordForm"
+      );
+      changePasswordForm.addEventListener("submit", async function (event) {
+  event.preventDefault();
+  const oldPassword = document.getElementById("oldPassword").value;
+  const newPassword = document.getElementById("newPassword").value;
+  const changepasswordMessage = document.getElementById("changepasswordMessage")
+  // Handle form submission here (e.g., send data to server)
+  const token = localStorage.getItem("token");
+  try {
+    const response = await fetch("http://localhost:3333/users/changepassword", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+      },
+      body: JSON.stringify({ oldPassword: oldPassword,newPassword:newPassword  }), // Send as an object
+    });
+    const data = await response.json()
+    if (response.ok) {
+      changepasswordMessage.innerHTML=`password changed succesfully`
+      // window.location.reload();
+      return
+    }
+    console.log(data)
+    changepasswordMessage.innerHTML=`password not updated ${data}`
+  } catch (error) {
+    changepasswordMessage.innerHTML=`password not updated ${data}`
+  }
+});
       function fetchDesigns(token) {
         fetch("http://localhost:3333/measurement/", {
           method: "GET",
