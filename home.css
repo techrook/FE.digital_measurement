@@ -189,9 +189,22 @@ header {
   font-size: 28px;
   font-weight: bold;
 }
+.close_password{
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
 
 .close:hover,
 .close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.close_password:hover,
+.close_password:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
