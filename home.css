@@ -1,6 +1,9 @@
 body {
   font-family: Arial, sans-serif;
 }
+.container {
+  margin-bottom: 60px; /* Adjust this value as needed */
+}
 
 #designsContainer {
   display: flex;
@@ -52,43 +55,47 @@ body {
   background-color: #0056b3;
 }
 #info {
-    color: red;
-    font-size: 16px;
-    font-weight: bold;
-    margin-top: 10px;
+  color: red;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
 }
 footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f8f9fa;
+  text-align: center;
+  padding: 10px 0;
+  color: #333;
+  font-size: 14px;
+  border-top: 1px solid #ccc;
 }
+
 header {
-    background-color: #333;
-    color: white;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .user-profile {
-    display: flex;
-    align-items: center;
-    margin-right: 20px;
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
 }
 
 .user-profile p {
-    margin-right: 10px;
-    margin: 0;
+  margin-right: 10px;
+  margin: 0;
   font-weight: bold;
 }
 
 .user-profile a {
-   color: #ffc107;
+  color: #ffc107;
   text-decoration: none;
   padding: 5px 10px;
   border: 1px solid #ffc107;
@@ -96,7 +103,7 @@ header {
 }
 
 .user-profile a:hover {
-    background-color: #ffc107;
+  background-color: #ffc107;
   color: #333;
 }
 #add_measurement_button {
@@ -120,7 +127,8 @@ header {
 }
 
 /* Dropdown button on hover & focus */
-.dropbtn:hover, .dropbtn:focus {
+.dropbtn:hover,
+.dropbtn:focus {
   background-color: #555;
 }
 
@@ -136,7 +144,7 @@ header {
   position: absolute;
   background-color: #f9f9f9;
   min-width: 160px;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
@@ -172,7 +180,7 @@ header {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
@@ -189,7 +197,7 @@ header {
   font-size: 28px;
   font-weight: bold;
 }
-.close_password{
+.close_password {
   color: #aaa;
   float: right;
   font-size: 28px;
