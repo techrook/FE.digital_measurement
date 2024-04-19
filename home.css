@@ -82,15 +82,17 @@ header {
   align-items: center;
 }
 
+h1 {
+  margin: 0;
+}
+
 .user-profile {
   display: flex;
   align-items: center;
-  margin-right: 20px;
 }
 
 .user-profile p {
   margin-right: 10px;
-  margin: 0;
   font-weight: bold;
 }
 
@@ -106,6 +108,7 @@ header {
   background-color: #ffc107;
   color: #333;
 }
+
 #add_measurement_button {
   background-color: #28a745;
   color: white;
